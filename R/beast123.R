@@ -54,7 +54,7 @@ beast123 <- function(Y, metadata=list(), prior=list(),
 	ANS     = .Call( BEASTV4_rexFunction, list(funstr,Y,metadata,prior,mcmc,extra,cputype),   212345)   		   
  } else {
     if (hasArg("local")){ # run the local developer's version of Rbeast
-		#ANS  = .Call( "rexFunction1", list(funstr,Y,metadata,prior,mcmc,extra),   212345, PACKAGE="Rbeast.mexw64")  
+		
 	} else{
 	    ANS  = .Call( BEASTV4_rexFunction, list(funstr,Y,metadata,prior,mcmc,extra),   212345)   		   
 	}		   
