@@ -1,0 +1,94 @@
+name: Build R binary package on AArch64 Linux
+
+on:
+
+  workflow_dispatch:
+
+jobs:
+  build-r-binary-aarch64:
+    # Native GitHub-hosted ARM64 Linux runner
+    runs-on: ubuntu-24.04-arm
+
+    # If you use your own AArch64 Linux runner instead, replace the line above with:
+    # runs-on: [self-hosted, linux, ARM64]
+
+    env:
+      CC: gcc
+      CXX: g++
+      FC: gfortran
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+
+      - name: Show system architecture
+        run: |
+          uname -a
+          uname -m
+          gcc --version || true
+
+      - name: Install system build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            gcc \
+            g++ \
+            gfortran \
+            make \
+            pandoc \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            libfontconfig1-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libfreetype6-dev \
+            libpng-dev \
+            libtiff5-dev \
+            libjpeg-dev
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: false
+
+      - name: Install R package dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          #dependencies: '"hard"'
+          extra-packages: |
+            any::rcmdcheck
+            any::remotes
+
+      - name: Build source package
+        run: |
+          mkdir -p build
+          R CMD build . --no-manual
+          mv *.tar.gz build/
+
+      - name: Install package as binary
+        run: |
+          PKG_TARBALL=$(ls build/*.tar.gz | head -n 1)
+          mkdir -p build/binary
+          R CMD INSTALL --build "$PKG_TARBALL"
+          mv *.tgz build/binary/ 2>/dev/null || true
+
+      - name: Check installed package
+        run: |
+          Rscript -e 'cat("R version:", R.version.string, "\n")'
+          Rscript -e 'cat("Platform:", R.version$platform, "\n")'
+
+      - name: Upload source package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r-source-package-aarch64-linux
+          path: build/*.tar.gz
+
+      - name: Upload binary package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: r-binary-package-aarch64-linux
+          path: build/binary/*
