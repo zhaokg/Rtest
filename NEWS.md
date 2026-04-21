@@ -1,3 +1,24 @@
+# CHANGES IN Rbeast 1.0.2
+
+* Add two new arguments s.complexfct and t.complexfct ( prior$seasonComplexityFactor and prior$trendComplexityFactor)
+* to allow users to mannually tune how complex the seasonal and trend curves are, rather than using the default
+* non-informative priors (s.complexfct=0, and t.complexfct=0).
+ 
+
+# CHANGES IN Rbeast 1.0.1
+
+* Supress the printing of an empty line in the quiet mode, thanks to Jiapei  Ma and Marina Siebold.
+* Add a few additional method option (e.g., bic2 and bic1.5)
+
+# CHANGES IN Rbeast 1.0.0
+
+* Fix the warning message regarding "format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘VOID_PTR’ {aka ‘void *’} [-Wformat=]"
+
+* Fix the note message regarding checkRd: (-1) beast.Rd:155: Lost braces; missing escapes or markup?
+
+* Add the tseg.leftmargin and tseg.rightmargin arguments upon the request of  Racine Nassau
+
+
 # CHANGES IN Rbeast 0.9.8/9
 
 * Fix the warning message regarding "long long unsigned int[0]' [-Warray-bounds]" and the Wstrict-prototypes warning.
