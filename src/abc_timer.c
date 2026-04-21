@@ -162,7 +162,7 @@ void Sleep_ms(int milliseconds) {
 
   //https://stackoverflow.com/questions/12631856/difference-between-rdtscp-rdtsc-memory-and-cpuid-rdtsc
   //https://stackoverflow.com/questions/40454157/is-there-an-equivalent-instruction-to-rdtsc-in-arm
-   static INLINE U64 _rdtsc(void) {
+   static INLINE U64 __rdtsc(void) {
         U64 val;
         /*
          * According to ARM DDI 0487F.c, from Armv8.0 to Armv8.5 inclusive, the
